@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:spotify/common/widgets/button/basic_app_button.dart';
 import 'package:spotify/common/widgets/elipse.dart';
 import 'package:spotify/core/configs/assets/images/app_images.dart';
 import 'package:spotify/core/configs/assets/vectors/app_vectors.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
+import 'package:spotify/presentation/auth/pages/signup_or_signin.dart';
+import 'package:spotify/presentation/choose_mode/bloc/theme_cubit.dart';
 
 class ChooseModePage extends StatelessWidget {
   const ChooseModePage({super.key});
@@ -49,7 +52,12 @@ class ChooseModePage extends StatelessWidget {
                     Column(
                       children: [
                         Elipse(
-                            color: Color(0xff30393C),
+                            onTap: () {
+                              context
+                                  .read<ThemeCubit>()
+                                  .updateTheme(ThemeMode.dark);
+                            },
+                            color: const Color(0xff30393C),
                             icon: AppVectors.moon_icon),
                         const SizedBox(
                           height: 15,
@@ -64,12 +72,17 @@ class ChooseModePage extends StatelessWidget {
                     Column(
                       children: [
                         Elipse(
-                            color: Color(0xff30393C),
+                            onTap: () {
+                              context
+                                  .read<ThemeCubit>()
+                                  .updateTheme(ThemeMode.light);
+                            },
+                            color: const Color(0xff30393C),
                             icon: AppVectors.sun_icon),
                         const SizedBox(
                           height: 15,
                         ),
-                        const Text("Dark Mode",
+                        const Text("Light Mode",
                             style: TextStyle(
                                 color: AppColors.grey,
                                 fontWeight: FontWeight.w500,
@@ -87,7 +100,7 @@ class ChooseModePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ChooseModePage()));
+                            builder: (context) => const SignupOrSigninPage()));
                   },
                 ),
               ],
