@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: mode,
-          title: 'Material App',
+          title: 'Spotify',
           home: const SplashPage(),
         ),
       ),
