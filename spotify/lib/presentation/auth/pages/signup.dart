@@ -5,9 +5,17 @@ import 'package:spotify/common/widgets/button/basic_app_button.dart';
 import 'package:spotify/common/widgets/text_field.dart';
 import 'package:spotify/core/configs/assets/vectors/app_vectors.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
+import 'package:spotify/data/models/auth/create_user_req.dart';
+import 'package:spotify/domain/usecases/auth/signup.dart';
+import 'package:spotify/initialize/service_locator.dart';
+import 'package:spotify/root/pages/root.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+  SignupPage({super.key});
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +45,14 @@ class SignupPage extends StatelessWidget {
                 height: 26,
               ),
               BasicTextField(
-                controller: TextEditingController(),
+                controller: _fullNameController,
                 hinText: "Full Name",
               ),
               const SizedBox(
                 height: 16,
               ),
               BasicTextField(
-                controller: TextEditingController(),
+                controller: _emailController,
                 hinText: "Enter Email",
               ),
               const SizedBox(
@@ -52,15 +60,36 @@ class SignupPage extends StatelessWidget {
               ),
               BasicTextField(
                 iconButton: Icon(Icons.remove_red_eye_outlined),
-                controller: TextEditingController(),
+                controller: _passwordController,
                 hinText: "Password",
               ),
               const SizedBox(
                 height: 33,
               ),
               BasicAppButton(
-                title: "creat account",
-                onPressed: () {},
+                title: "create account",
+                onPressed: () async {
+                var result = await sl<SignupUseCase>().call(
+                  params: CreateUserReq(
+                    fullName: _fullNameController.text.toString(),
+                    email: _emailController.text.toString(),
+                    password: _passwordController.text.toString()
+                  )
+                );
+                result.fold(
+                  (l){
+                    var snackbar = SnackBar(content: Text(l),behavior: SnackBarBehavior.floating,);
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  },
+                  (r){
+                    Navigator.pushAndRemoveUntil(
+                      context, 
+                      MaterialPageRoute(builder: (BuildContext context) => const RootPage()), 
+                      (route) => false
+                    );
+                  }
+                );
+              },
               ),
               const SizedBox(
                 height: 50,
