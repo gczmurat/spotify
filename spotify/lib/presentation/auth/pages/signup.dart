@@ -8,7 +8,7 @@ import 'package:spotify/core/configs/theme/app_colors.dart';
 import 'package:spotify/data/models/auth/create_user_req.dart';
 import 'package:spotify/domain/usecases/auth/signup.dart';
 import 'package:spotify/initialize/service_locator.dart';
-import 'package:spotify/root/pages/root.dart';
+import 'package:spotify/presentation/home/pages/home.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -45,6 +45,7 @@ class SignupPage extends StatelessWidget {
                 height: 26,
               ),
               BasicTextField(
+                obscureText: false,
                 controller: _fullNameController,
                 hinText: "Full Name",
               ),
@@ -52,6 +53,7 @@ class SignupPage extends StatelessWidget {
                 height: 16,
               ),
               BasicTextField(
+                obscureText: false,
                 controller: _emailController,
                 hinText: "Enter Email",
               ),
@@ -59,6 +61,7 @@ class SignupPage extends StatelessWidget {
                 height: 16,
               ),
               BasicTextField(
+                obscureText: true,
                 iconButton: Icon(Icons.remove_red_eye_outlined),
                 controller: _passwordController,
                 hinText: "Password",
@@ -84,7 +87,7 @@ class SignupPage extends StatelessWidget {
                   (r){
                     Navigator.pushAndRemoveUntil(
                       context, 
-                      MaterialPageRoute(builder: (BuildContext context) => const RootPage()), 
+                      MaterialPageRoute(builder: (BuildContext context) => const HomePage()), 
                       (route) => false
                     );
                   }

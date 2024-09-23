@@ -5,4 +5,5 @@ class AppImages {
   static const String choose_mode_background =
       '${path}choose_background$format';
   static const String billie_eilish = '${path}billie$format';
+  static const String home_artist = '${path}home_artist$format';
 }

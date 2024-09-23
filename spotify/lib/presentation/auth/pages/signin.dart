@@ -5,9 +5,15 @@ import 'package:spotify/common/widgets/button/basic_app_button.dart';
 import 'package:spotify/common/widgets/text_field.dart';
 import 'package:spotify/core/configs/assets/vectors/app_vectors.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
+import 'package:spotify/data/models/auth/signin_user_req.dart';
+import 'package:spotify/domain/usecases/auth/signin.dart';
+import 'package:spotify/initialize/service_locator.dart';
+import 'package:spotify/presentation/home/pages/home.dart';
 
 class SigninPage extends StatelessWidget {
-  const SigninPage({super.key});
+  SigninPage({super.key});
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +43,17 @@ class SigninPage extends StatelessWidget {
                 height: 26,
               ),
               BasicTextField(
-                controller: TextEditingController(),
-                hinText: "Enter username or email",
+                obscureText: false,
+                controller: _emailController,
+                hinText: "Enter email",
               ),
               const SizedBox(
                 height: 16,
               ),
               BasicTextField(
+                obscureText: true,
                 iconButton: const Icon(Icons.remove_red_eye_outlined),
-                controller: TextEditingController(),
+                controller: _passwordController,
                 hinText: "Password",
               ),
               const SizedBox(
@@ -53,7 +61,26 @@ class SigninPage extends StatelessWidget {
               ),
               BasicAppButton(
                 title: "Sign In",
-                onPressed: () {},
+                onPressed: () async {
+                  var result = await sl<SigninUseCase>().call(
+                      params: SigninUserReq(
+                          email: _emailController.text.toString(),
+                          password: _passwordController.text.toString()));
+                  result.fold((l) {
+                    var snackbar = SnackBar(
+                      content: Text(l),
+                      behavior: SnackBarBehavior.floating,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  }, (r) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const HomePage()),
+                        (route) => false);
+                  });
+                },
               ),
               const SizedBox(
                 height: 100,
@@ -80,10 +107,7 @@ class SigninPage extends StatelessWidget {
       children: [
         const Text(
           "If you need any support",
-          style: TextStyle(
-              
-              fontSize: 13,
-              fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         ),
         TextButton(
             onPressed: () {},
@@ -101,10 +125,7 @@ class SigninPage extends StatelessWidget {
       children: [
         const Text(
           "not a member ?",
-          style: TextStyle(
-              
-              fontSize: 13,
-              fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         ),
         TextButton(
             onPressed: () {},
